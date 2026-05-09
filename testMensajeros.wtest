@@ -1,0 +1,49 @@
+import mensajeros.*
+import vehiculos.*
+import paquetes.*
+import destinos.*
+import empresa.*
+
+describe "Test Mensajeros" {
+
+  test "Roberto puede llevar paquete con un acoplado" {
+    assert.that(paquete.puedeEntregarse(roberto, brooklyn))
+  }
+
+  test "Neo no puede llevar paquete que no está pago" {
+    neo.cargarCredito(100)
+    assert.notThat(paquete.puedeEntregarse(neo, matrix))
+  }
+
+}
+
+describe "Test Empresa" {
+  method initialize() {
+    empresa.contratar(roberto)
+    empresa.contratar(chuck)
+    empresa.contratar(neo)
+  }
+
+  test "Contratar" {
+    assert.that(empresa.mensajeros().contains(roberto))
+  }
+
+  test "Despedir" {
+    empresa.despedir(roberto)
+    assert.notThat(empresa.mensajeros().contains(roberto))
+  }
+
+  test "Mensajería es Grande y Despedir a Todos" {
+    assert.that(empresa.mensajeriaEsGrande())
+    empresa.despedirATodos()
+    assert.that(empresa.mensajeros().size() == 0)
+  }
+
+  test "Primer Mensajero Puede Entregar" {
+    assert.that(empresa.primerMensajeroPuedeEntregar(paquete, brooklyn))
+  }
+
+  test "Peso Último Mensajero" {
+    assert.equals(0, empresa.pesoUltimoMensajero())
+  }
+}
